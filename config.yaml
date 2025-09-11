@@ -1,0 +1,46 @@
+# configuration for generating barcoded primers
+
+#how many barcoded primers to generate
+n_primers: 32
+#length of the random barcode sequence to be generated
+barcode_length: 12
+#file with candidate barcodes (forward and reverse) to draw from instead of generating randomly
+use_barcodes_from: ont_barcodes.csv
+#template binding sequence
+# (Universal gyrB primers (UP-1 / UP-2r) — Yamamoto & Harayama 1995)
+template_binding_seq_fwd: GAAGTCATCATGACCGTTCTGCAYGCNGGNGGNAARTTYGA  # UP1 forward gene primer
+template_binding_seq_rev: AGCAGGGTACGGATGTGCGAGCCRTCNACRTCNGCRTCNGTCAT  # UP2r reverse gene primer
+#flanking sequence (i.e. ONT's tail sequence for ligation sequencing)
+flanking_seq_fwd: TTTCTGTTGGTGCTGATATTGC
+flanking_seq_rev: ACTTGCCTGTCGCTCTATCTTC
+
+#thresholds for filtering candidate barcodes
+# gc_min: 0.40
+# gc_max: 0.60
+
+#checks on the whole primer (flanking + barcode + template binding)
+# avoid_seqs: [GGC, GAATTC]
+# avoid_at_junction_seqs: [GGC]
+# homopolymer_max: 2
+# junction_homopolymer_max: 4
+
+#checks between primers
+# min_edit_distance: 3
+# max_hetero_stretch: 6
+
+#
+# asymmetric: true
+# random_seed: 42
+
+# output files, to be saved in the output/ dir
+#if ommitted, outputs will not be generated
+filename_idt: primers_idt.csv
+filename_failed: failed_barcodes.csv
+filename_fasta: primers.fasta
+filename_plate: primers_idt_plateformat.csv
+# plate_rows: 8
+# plate_cols: 12
+# plate_split: true
+# scale: 25nm
+# purification: STD
+#timestamp_outdir: true
