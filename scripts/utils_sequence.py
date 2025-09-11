@@ -18,9 +18,5 @@ def check_edit_distance(barcode, accepted_pairs, edit_min):
             return False, f'edit distance to existing barcode less than {edit_min}'
     return True, None
 
-def get_rev_comp(seq):
-    complement = str.maketrans('ACGTN', 'TGCAN')
-    return seq.translate(complement)[::-1]
-
 def get_fwd_primer_seq(barcode, flanking_seq, template_binding_seq):
     return f"{flanking_seq}{barcode}{template_binding_seq}"

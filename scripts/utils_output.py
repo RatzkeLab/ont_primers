@@ -1,6 +1,7 @@
 """
 File writing utilities for primers/barcodes
 """
+import openpyxl
 import csv
 from typing import List, Tuple, Dict
 import string
@@ -28,14 +29,52 @@ def write_fasta(primer_pairs: List[Tuple[str, str]], outfile: str) -> None:
     with open(outfile, 'w') as fh:
         for i, pair in enumerate(primer_pairs, 1):
             bid = f"BC{i:02d}"
-            fh.write(f">{bid}_F|barcode={pair[0]}\n{pair[1]}\n")
-            fh.write(f">{bid}_R|barcode={pair[0]}\n{pair[1]}\n")
+            fh.write(f">{bid}_F\n{pair[0]}\n")
+            fh.write(f">{bid}_R\n{pair[1]}\n")
 
 def well_ids(rows: int, cols: int) -> List[str]:
     letters = string.ascii_uppercase[:rows]
     return [f"{letters[r]}{c}" for r in range(rows) for c in range(1, cols+1)]
 
-def write_plate_csvs(primer_pairs: List[Tuple[str, str]], outfile: str, rows: int, cols: int, scale: str, purification: str, split: bool) -> None:
+def write_plate_csvs(primer_pairs: List[Tuple[str, str]], outfile: str, rows: int, cols: int) -> None:
+    primers = []
+    letters = string.ascii_uppercase[:rows]
+    for i, pair in enumerate(primer_pairs, 1):
+        bid = f"BC{i:02d}"
+        primers.append((f"{bid}_F", pair[0]))
+        primers.append((f"{bid}_R", pair[1]))
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Plate"
+    ws.append(["Well", "Name", "Sequence"])
+    for i, pair in enumerate(primer_pairs):
+        bid_fwd = f"BC{i+1:02d}_F"
+        bid_rev = f"BC{i+1:02d}_R"
+        ws.append([f"{letters[(i//cols)*2]}{i%cols+1:02d}", bid_fwd, pair[0]])
+        ws.append([f"{letters[(i//cols)*2+1]}{i%cols+1:02d}", bid_rev, pair[1]])
+
+    if not outfile.endswith('.xlsx'):
+        outfile = outfile.rsplit('.', 1)[0] + '.xlsx'
+    wb.save(outfile)
+
+# def write_plate_csvs(primer_pairs: List[Tuple[str, str]], outfile: str, rows: int, cols: int) -> None:
+#     primers = []
+#     letters = string.ascii_uppercase[:rows]
+#     for i, pair in enumerate(primer_pairs, 1):
+#         bid = f"BC{i:02d}"
+#         primers.append((f"{bid}_F", pair[0]))
+#         primers.append((f"{bid}_R", pair[1]))
+#     with open(outfile, 'w', newline='') as fh:
+#             w = csv.writer(fh)
+#             w.writerow(["Well","Name","Sequence"])
+#             for i, pair in enumerate(primer_pairs):
+#                 bid_fwd = f"BC{i+1:02d}_F"
+#                 bid_rev = f"BC{i+1:02d}_R"
+#                 w.writerow([f"{letters[(i//rows)*2]}{i%cols+1:02d}", bid_fwd, pair[0]])
+#                 w.writerow([f"{letters[(i//rows)*2+1]}{i%cols+1:02d}", bid_rev, pair[1]])
+
+
+def write_plate_csvs_alt(primer_pairs: List[Tuple[str, str]], outfile: str, rows: int, cols: int, scale: str, purification: str, split: bool) -> None:
     primers = []
     for i, pair in enumerate(primer_pairs, 1):
         bid = f"BC{i:02d}"
@@ -77,7 +116,7 @@ def write_outputs(barcode_pairs, failures, config):
     scale = config.get("scale", "25nm")
     purification = config.get("purification", "STD")
     timestamp_outdir = config.get("timestamp_outdir", True)
-    outdir = config.get("outdir", "../output")
+    outdir = config.get("outdir", "output")
 
     if timestamp_outdir:
         ts = datetime.now().strftime("%y%m%d_%H%M")
@@ -101,4 +140,4 @@ def write_outputs(barcode_pairs, failures, config):
         write_fasta(primer_pairs, filepath_fasta)
     if filename_plate:
         filepath_plate = os.path.join(outdir, filename_plate)
-        write_plate_csvs(primer_pairs, filepath_plate, plate_rows, plate_cols, scale=scale, purification=purification, split=plate_split)
+        write_plate_csvs(primer_pairs, filepath_plate, plate_rows, plate_cols)

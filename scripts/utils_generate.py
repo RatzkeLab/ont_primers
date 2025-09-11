@@ -5,7 +5,7 @@ Barcode and primer generation logic
 import logging
 import csv
 import random
-from .utils_sequence import check_gc, check_edit_distance, get_rev_comp
+from .utils_sequence import check_gc, check_edit_distance
 
 def generate_random_barcode(length, seed):
     random.seed(seed)
@@ -18,7 +18,7 @@ def get_provided_barcodes(filepath):
             reader = csv.reader(f)
             #skip header if present
             header = next(reader)
-        provided_barcodes = [row[1] for row in reader if row]
+            provided_barcodes = [row[1] for row in reader if row]
         logging.info(f"Loaded {len(provided_barcodes)} barcodes from {filepath}")
     else:
         logging.info("No barcode file provided, generating barcodes randomly")    
@@ -67,5 +67,6 @@ def generate_barcodes(config):
             if edit_check[0] is False:
                 failures.append({"barcode": barcode, "reason": edit_check[1]})
                 continue
-            rev_barcode = get_rev_comp(barcode) #TODO add option for asymmetric barcode pairs
+            rev_barcode = str(barcode)[:-3] #TODO add option for asymmetric barcode pairs #FIXME just trimming to satisfy idt requirements
             accepted_pairs.append((barcode, rev_barcode))
+    return accepted_pairs, failures

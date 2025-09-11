@@ -9,10 +9,14 @@ use_barcodes_from: ont_barcodes.csv
 #template binding sequence
 # (Universal gyrB primers (UP-1 / UP-2r) — Yamamoto & Harayama 1995)
 template_binding_seq_fwd: GAAGTCATCATGACCGTTCTGCAYGCNGGNGGNAARTTYGA  # UP1 forward gene primer
+#	                        GAAGTCATCATGACCGTTCTGCAYGCNGGNGGNAARTTYGA
 template_binding_seq_rev: AGCAGGGTACGGATGTGCGAGCCRTCNACRTCNGCRTCNGTCAT  # UP2r reverse gene primer
+#                         AGCAGGGTACGGATGTGCGAGCCRTCNACRTCNGCRTCNGTCAT	
 #flanking sequence (i.e. ONT's tail sequence for ligation sequencing)
-flanking_seq_fwd: TTTCTGTTGGTGCTGATATTGC
-flanking_seq_rev: ACTTGCCTGTCGCTCTATCTTC
+# flanking_seq_fwd: TTTCTGTTGGTGCTGATATTGC
+flanking_seq_fwd: ATCGCCTACCGTGAC
+# flanking_seq_rev: ACTTGCCTGTCGCTCTATCTTC
+flanking_seq_rev: ATCGCCTACCGTGAC
 
 #thresholds for filtering candidate barcodes
 # gc_min: 0.40
