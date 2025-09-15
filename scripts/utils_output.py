@@ -129,6 +129,7 @@ def write_outputs(barcode_pairs, failures, config):
         rev_seq = f"{flanking_seq_rev}{barcode_pairs[i][1]}{template_binding_seq_rev}"
         primer_pairs.append((fwd_seq, rev_seq))
 
+    # TODO: also write config used for this run
     if filename_idt:
         filepath_idt = os.path.join(outdir, filename_idt)
         write_idt_csv(primer_pairs, filepath_idt, scale=scale, purification=purification)

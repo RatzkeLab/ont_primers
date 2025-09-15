@@ -67,6 +67,10 @@ def generate_barcodes(config):
             if edit_check[0] is False:
                 failures.append({"barcode": barcode, "reason": edit_check[1]})
                 continue
-            rev_barcode = str(barcode)[:-3] #TODO add option for asymmetric barcode pairs #FIXME just trimming to satisfy idt requirements
+            #TODO: add checks for homopolymers, forbidden motifs, junction checks etc
+            #TODO: add check for simulating (montecarlo) ont error profile
+            #TODO: save and report edit distances (distribution or matrix)
+            #TODO: add asymmetric barcode pairs option
+            rev_barcode = str(barcode)[:-3] #FIXME just trimming to satisfy idt requirements (80bp max)
             accepted_pairs.append((barcode, rev_barcode))
     return accepted_pairs, failures

@@ -1,7 +1,7 @@
 # configuration for generating barcoded primers
 
 #how many barcoded primers to generate
-n_primers: 32
+n_primers: 20
 #length of the random barcode sequence to be generated
 barcode_length: 12
 #file with candidate barcodes (forward and reverse) to draw from instead of generating randomly
@@ -27,12 +27,23 @@ flanking_seq_rev: ATCGCCTACCGTGAC
 # avoid_at_junction_seqs: [GGC]
 # homopolymer_max: 2
 # junction_homopolymer_max: 4
+# tm_min: 50
+# tm_max: 65
+# tm_method: 'wallace'  # options: 'wallace', 'santal
+# hairpin_max: 5
+# dimer_max: 5
+# self_dimer_max: 5
+# gc_clamp: true
+# gc_clamp_3prime: 2
 
 #checks between primers
 # min_edit_distance: 3
 # max_hetero_stretch: 6
+# max_contiguous_complement:6
+# max_contiuous complement_at_3prime: 3
 
-#
+# controls for primer generation
+# max_tries: 1000
 # asymmetric: true
 # random_seed: 42
 
